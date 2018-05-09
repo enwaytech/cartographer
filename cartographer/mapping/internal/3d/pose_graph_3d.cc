@@ -785,9 +785,7 @@ transform::Rigid3d PoseGraph3D::ComputeLocalToGlobalTransform(
   if (begin_it == end_it) {
     const auto it = initial_trajectory_poses_.find(trajectory_id);
     if (it != initial_trajectory_poses_.end()) {
-      return GetInterpolatedGlobalTrajectoryPose(it->second.to_trajectory_id,
-                                                 it->second.time) *
-             it->second.relative_pose;
+	  return it->second.relative_pose;
     } else {
       return transform::Rigid3d::Identity();
     }

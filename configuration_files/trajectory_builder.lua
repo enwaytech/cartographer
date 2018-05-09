@@ -19,4 +19,24 @@ TRAJECTORY_BUILDER = {
   trajectory_builder_2d = TRAJECTORY_BUILDER_2D,
   trajectory_builder_3d = TRAJECTORY_BUILDER_3D,
   pure_localization = false,
+  pure_localization_trimmer = {
+    max_submaps_to_keep = 3,
+  },
+  initial_trajectory_pose = {
+    to_trajectory_id = 0,
+    timestamp = 0,
+    relative_pose = {
+      translation = {
+        x = 0.0,
+        y = 0.0,
+        z = 0.0,
+      },
+      rotation = {
+        roll = 0.0,
+        pitch = 0.0,
+        yaw = 0.0,
+      },
+    },
+  },
+
 }
