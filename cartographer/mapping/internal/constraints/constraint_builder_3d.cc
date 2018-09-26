@@ -229,7 +229,8 @@ void ConstraintBuilder3D::ComputeConstraint(
   } else {
     bool mapping = submap_id.trajectory_id == 0 && node_id.trajectory_id == 0;
     bool initializing = submap_id.submap_index <= 1 && node_id.trajectory_id == 0;
-    bool log = mapping || initializing;
+    bool global_localization = submap_id.trajectory_id != node_id.trajectory_id;
+    bool log = mapping || initializing || global_localization;
 
     kConstraintsSearchedMetric->Increment();
     match_result = submap_scan_matcher.fast_correlative_scan_matcher->Match(
