@@ -48,7 +48,7 @@ find_package(LuaGoogle REQUIRED)
 # endif()
 set(PROTOBUF_PROTOC_EXECUTABLE /opt/protobuf3/bin/protoc)
 set(PROTOBUF_INCLUDE_DIR /opt/protobuf3/include)
-set(PROTOBUF_LIBRARY /opt/protobuf3/lib/x86_64-linux-gnu/libprotobuf.so)
+set(PROTOBUF_LIBRARY /opt/protobuf3/lib/libprotobuf.so)
 
 if (${BUILD_GRPC})
   find_package(async_grpc REQUIRED)
