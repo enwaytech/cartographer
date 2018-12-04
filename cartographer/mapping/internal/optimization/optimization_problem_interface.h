@@ -71,7 +71,8 @@ class OptimizationProblemInterface {
       const std::vector<Constraint>& constraints,
       const std::map<int, PoseGraphInterface::TrajectoryState>&
           trajectories_state,
-      const std::map<std::string, LandmarkNode>& landmark_nodes) = 0;
+      const std::map<std::string, LandmarkNode>& landmark_nodes,
+      const std::set<std::string>& frozen_landmarks) = 0;
 
   virtual const MapById<NodeId, NodeDataType>& node_data() const = 0;
   virtual const MapById<SubmapId, SubmapDataType>& submap_data() const = 0;

@@ -828,7 +828,7 @@ void PoseGraph3D::RunOptimization() {
   // Solve. Solve is time consuming, so not taking the mutex before Solve to
   // avoid blocking foreground processing.
   optimization_problem_->Solve(data_.constraints, GetTrajectoryStates(),
-                               data_.landmark_nodes);
+                               data_.landmark_nodes, data_.frozen_landmarks);
   absl::MutexLock locker(&mutex_);
 
   const auto& submap_data = optimization_problem_->submap_data();
@@ -948,6 +948,7 @@ void PoseGraph3D::SetLandmarkPose(const std::string& landmark_id,
   AddWorkItem([=]() LOCKS_EXCLUDED(mutex_) {
     absl::MutexLock locker(&mutex_);
     data_.landmark_nodes[landmark_id].global_landmark_pose = global_pose;
+    data_.frozen_landmarks.insert(landmark_id);
     return WorkItem::Result::kDoNotRunOptimization;
   });
 }

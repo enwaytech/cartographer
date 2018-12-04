@@ -123,16 +123,13 @@ transform::Rigid3d GetInitialLandmarkPose(
 
 void AddLandmarkCostFunctions(
     const std::map<std::string, LandmarkNode>& landmark_nodes,
-    bool freeze_landmarks, const MapById<NodeId, NodeSpec3D>& node_data,
+    const std::set<std::string>& frozen_landmarks,
+    const MapById<NodeId, NodeSpec3D>& node_data,
     MapById<NodeId, CeresPose>* C_nodes,
     std::map<std::string, CeresPose>* C_landmarks, ceres::Problem* problem,
     double huber_scale) {
   for (const auto& landmark_node : landmark_nodes) {
     // Do not use landmarks that were not optimized for localization.
-    if (!landmark_node.second.global_landmark_pose.has_value() &&
-        freeze_landmarks) {
-      continue;
-    }
     for (const auto& observation : landmark_node.second.landmark_observations) {
       const std::string& landmark_id = landmark_node.first;
       const auto& begin_of_trajectory =
@@ -167,7 +164,8 @@ void AddLandmarkCostFunctions(
             CeresPose(starting_point, nullptr /* translation_parametrization */,
                       absl::make_unique<ceres::QuaternionParameterization>(),
                       problem));
-        if (freeze_landmarks) {
+        // Set landmark constant if it is frozen
+        if (frozen_landmarks.count(landmark_node.first) != 0) {
           problem->SetParameterBlockConstant(
               C_landmarks->at(landmark_id).translation());
           problem->SetParameterBlockConstant(
@@ -261,7 +259,8 @@ void OptimizationProblem3D::Solve(
     const std::vector<Constraint>& constraints,
     const std::map<int, PoseGraphInterface::TrajectoryState>&
         trajectories_state,
-    const std::map<std::string, LandmarkNode>& landmark_nodes) {
+    const std::map<std::string, LandmarkNode>& landmark_nodes,
+    const std::set<std::string>& frozen_landmarks) {
   if (node_data_.empty()) {
     // Nothing to optimize.
     return;
@@ -291,7 +290,6 @@ void OptimizationProblem3D::Solve(
   MapById<NodeId, CeresPose> C_nodes;
   std::map<std::string, CeresPose> C_landmarks;
   bool first_submap = true;
-  bool freeze_landmarks = !frozen_trajectories.empty();
   for (const auto& submap_id_data : submap_data_) {
     const bool frozen =
         frozen_trajectories.count(submap_id_data.id.trajectory_id) != 0;
@@ -351,7 +349,7 @@ void OptimizationProblem3D::Solve(
         C_nodes.at(constraint.node_id).translation());
   }
   // Add cost functions for landmarks.
-  AddLandmarkCostFunctions(landmark_nodes, freeze_landmarks, node_data_,
+  AddLandmarkCostFunctions(landmark_nodes, frozen_landmarks, node_data_,
                            &C_nodes, &C_landmarks, &problem,
                            options_.huber_scale());
   // Add constraints based on IMU observations of angular velocities and
