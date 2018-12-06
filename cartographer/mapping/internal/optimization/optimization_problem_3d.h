@@ -77,12 +77,11 @@ class OptimizationProblem3D
   void TrimSubmap(const SubmapId& submap_id) override;
   void SetMaxNumIterations(int32 max_num_iterations) override;
 
-  void Solve(
-      const std::vector<Constraint>& constraints,
-      const std::map<int, PoseGraphInterface::TrajectoryState>&
-          trajectories_state,
-      const std::map<std::string, LandmarkNode>& landmark_nodes,
-      const std::set<std::string>& frozen_landmarks) override;
+  void Solve(const std::vector<Constraint>& constraints,
+             const std::map<int, PoseGraphInterface::TrajectoryState>&
+                 trajectories_state,
+             const std::map<std::string, LandmarkNode>& landmark_nodes,
+             const std::set<std::string>& frozen_landmarks) override;
 
   const MapById<NodeId, NodeSpec3D>& node_data() const override {
     return node_data_;
