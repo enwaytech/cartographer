@@ -105,6 +105,7 @@ class FastCorrelativeScanMatcher3D {
     const int linear_xy_window_size;     // voxels
     const int linear_z_window_size;      // voxels
     const double angular_search_window;  // radians
+    const double min_low_resolution_score;
     const MatchingFunction* const low_resolution_matcher;
   };
 
@@ -115,7 +116,7 @@ class FastCorrelativeScanMatcher3D {
       const sensor::PointCloud& point_cloud,
       const Eigen::VectorXf& rotational_scan_matcher_histogram,
       const Eigen::Quaterniond& gravity_alignment, float min_score,
-      const bool log = false) const;
+      const bool full = false, const bool log = false) const;
   DiscreteScan3D DiscretizeScan(const SearchParameters& search_parameters,
                                 const sensor::PointCloud& point_cloud,
                                 const transform::Rigid3f& pose,
