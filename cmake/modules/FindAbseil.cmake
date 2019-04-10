@@ -61,12 +61,22 @@ if(NOT TARGET standalone_absl)
     "${ABSEIL_PROJECT_BUILD_DIR}/absl/types/${prefix}absl_variant${suffix}"
     "${ABSEIL_PROJECT_BUILD_DIR}/absl/utility/${prefix}absl_utility${suffix}"
   )
+
+  # Use CMake --build's parallel mode to build Abseil if available
+  # Number of cores is manually specified to avoid jobserver issues when make is used
+  if(${CMAKE_VERSION} VERSION_GREATER "3.13.0")
+    include(ProcessorCount)  
+    ProcessorCount(processor_count)
+    set(parallel_flag --parallel ${processor_count})
+    unset(processor_count)
+  endif()
+
   ExternalProject_Add(${ABSEIL_PROJECT_NAME}
     PREFIX ${ABSEIL_PROJECT_NAME}
     GIT_REPOSITORY   https://github.com/abseil/abseil-cpp.git
     GIT_TAG          5441bbe1db5d0f2ca24b5b60166367b0966790af
     INSTALL_COMMAND  ""
-    BUILD_COMMAND    ${CMAKE_COMMAND} --build "${ABSEIL_PROJECT_BUILD_DIR}"
+    BUILD_COMMAND    ${CMAKE_COMMAND} --build "${ABSEIL_PROJECT_BUILD_DIR}" ${parallel_flag}
     CMAKE_CACHE_ARGS "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON;-DBUILD_TESTING:BOOL=OFF;-DCMAKE_BUILD_TYPE:STRING=Release"
     BUILD_BYPRODUCTS "${ABSEIL_LIBRARY_PATH};${ABSEIL_DEPENDENT_LIBRARIES}"
   )
@@ -84,4 +94,5 @@ if(NOT TARGET standalone_absl)
   add_dependencies(standalone_absl ${ABSEIL_PROJECT_NAME})
   unset(prefix)
   unset(suffix)
+  unset(parallel_flag)
 endif()
