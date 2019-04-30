@@ -37,6 +37,12 @@ find_package(LuaGoogle REQUIRED)
 # CONFIG makes CMake ignore the built in FindProtobuf module and look for our custom version instead
 find_package(Protobuf 3.0.0 REQUIRED CONFIG)
 
+
+get_cmake_property(_variableNames VARIABLES)
+foreach (_variableName ${_variableNames})
+    message(STATUS "${_variableName}=${${_variableName}}")
+endforeach()
+
 if (${BUILD_GRPC})
   find_package(async_grpc REQUIRED)
 endif()
