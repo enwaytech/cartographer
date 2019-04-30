@@ -34,7 +34,8 @@ find_package(Boost REQUIRED COMPONENTS iostreams)
 find_package(Ceres REQUIRED COMPONENTS SuiteSparse)
 find_package(Eigen3 REQUIRED)
 find_package(LuaGoogle REQUIRED)
-find_package(Protobuf 3.0.0 REQUIRED)
+# CONFIG makes CMake ignore the built in FindProtobuf module and look for our custom version instead
+find_package(Protobuf 3.4.1 EXACT REQUIRED CONFIG)
 
 if (${BUILD_GRPC})
   find_package(async_grpc REQUIRED)
