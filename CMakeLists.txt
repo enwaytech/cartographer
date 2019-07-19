@@ -24,6 +24,7 @@ set(CARTOGRAPHER_SOVERSION ${CARTOGRAPHER_MAJOR_VERSION}.${CARTOGRAPHER_MINOR_VE
 option(BUILD_GRPC "build Cartographer gRPC support" false)
 set(CARTOGRAPHER_HAS_GRPC ${BUILD_GRPC})
 option(BUILD_PROMETHEUS "build Prometheus monitoring support" false)
+set(PROTOBUF_PROTOC_EXECUTABLE /opt/enway/lib/protobuf-3.4.1/bin/protoc)
 
 include("${PROJECT_SOURCE_DIR}/cmake/functions.cmake")
 google_initialize_cartographer_project()
@@ -265,10 +266,13 @@ if("${CAIRO_INCLUDE_DIRS}")
 endif()
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CAIRO_LIBRARIES})
 
+set(PROTOBUF_INCLUDE_DIRS /opt/enway/lib/protobuf-3.4.1/include)
+set(PROTOBUF_LIBRARY /opt/enway/lib/protobuf-3.4.1/lib)
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC
   ${PROTOBUF_INCLUDE_DIRS})
 # TODO(hrapp): This should not explicitly list pthread and use
 # PROTOBUF_LIBRARIES, but that failed on first try.
+message(WARNING "using proto ${PROTOBUF_LIBRARY} frpm ${PROTOBUF_INCLUDE_DIRS}")
 target_link_libraries(${PROJECT_NAME} PUBLIC ${PROTOBUF_LIBRARY} standalone_absl)
 if (NOT WIN32)
   target_link_libraries(${PROJECT_NAME} PUBLIC pthread)
