@@ -165,11 +165,14 @@ TEST_P(MapBuilderTestByGridTypeAndDimensions, TrajectoryAddFinish) {
 }
 
 TEST_P(MapBuilderTestByGridType, LocalSlam2D) {
+
+  std::cerr << "LocalSlam2D" << std::endl;
   if (GetParam() == GridType::TSDF) SetOptionsToTSDF2D();
   BuildMapBuilder();
   int trajectory_id = map_builder_->AddTrajectoryBuilder(
       {kRangeSensorId}, trajectory_builder_options_,
       GetLocalSlamResultCallback());
+  std::cerr << "trajectory_id: " << trajectory_id << std::endl;
   TrajectoryBuilderInterface* trajectory_builder =
       map_builder_->GetTrajectoryBuilder(trajectory_id);
   const auto measurements = testing::GenerateFakeRangeMeasurements(
@@ -185,6 +188,7 @@ TEST_P(MapBuilderTestByGridType, LocalSlam2D) {
                local_slam_result_poses_.front().translation())
                   .norm(),
               0.1 * kTravelDistance);
+  std::cerr << "LocalSlam2D finished" << std::endl;
 }
 
 TEST_F(MapBuilderTest, LocalSlam3D) {
@@ -215,6 +219,7 @@ TEST_F(MapBuilderTest, LocalSlam3D) {
 }
 
 TEST_P(MapBuilderTestByGridType, GlobalSlam2D) {
+  std::cerr << "GlobalSlam2D" << std::endl;
   if (GetParam() == GridType::TSDF) SetOptionsToTSDF2D();
   SetOptionsEnableGlobalOptimization();
   BuildMapBuilder();
@@ -251,6 +256,7 @@ TEST_P(MapBuilderTestByGridType, GlobalSlam2D) {
       local_slam_result_poses_.back();
   EXPECT_NEAR(kTravelDistance, final_pose.translation().norm(),
               0.1 * kTravelDistance);
+  std::cerr << "GlobalSlam2D finished" << std::endl;
 }
 
 TEST_F(MapBuilderTest, GlobalSlam3D) {

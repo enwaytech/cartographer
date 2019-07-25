@@ -1001,6 +1001,9 @@ void PoseGraph2D::SetInitialTrajectoryPose(const int from_trajectory_id,
                                            const transform::Rigid3d& pose,
                                            const common::Time time) {
   absl::MutexLock locker(&mutex_);
+  std::cerr << from_trajectory_id << " initial pose @" << time << ":" << std::endl << pose << std::endl;
+  std::cerr << "default: " << transform::Rigid3d::Identity() << std::endl;
+
   data_.initial_trajectory_poses[from_trajectory_id] =
       InitialTrajectoryPose{to_trajectory_id, pose, time};
 }
