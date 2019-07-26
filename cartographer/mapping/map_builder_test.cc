@@ -23,6 +23,8 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
+#include <stdexcept>
+
 namespace cartographer {
 namespace mapping {
 namespace {

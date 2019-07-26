@@ -1010,6 +1010,7 @@ void PoseGraph2D::SetInitialTrajectoryPose(const int from_trajectory_id,
 
 transform::Rigid3d PoseGraph2D::GetInterpolatedGlobalTrajectoryPose(
     const int trajectory_id, const common::Time time) const {
+  std::cerr << "GetInterpolatedGlobalTrajectoryPose traj id: " << trajectory_id << std::endl;
   CHECK_GT(data_.trajectory_nodes.SizeOfTrajectoryOrZero(trajectory_id), 0);
   const auto it = data_.trajectory_nodes.lower_bound(trajectory_id, time);
   if (it == data_.trajectory_nodes.BeginOfTrajectory(trajectory_id)) {
@@ -1074,6 +1075,7 @@ transform::Rigid3d PoseGraph2D::ComputeLocalToGlobalTransform(
   auto end_it = global_submap_poses.EndOfTrajectory(trajectory_id);
   if (begin_it == end_it) {
     const auto it = data_.initial_trajectory_poses.find(trajectory_id);
+  std::cerr << "initial_trajectory_poses size: " << data_.initial_trajectory_poses.size() << std::endl;
     if (it != data_.initial_trajectory_poses.end()) {
       return GetInterpolatedGlobalTrajectoryPose(it->second.to_trajectory_id,
                                                  it->second.time) *
