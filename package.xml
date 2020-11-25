@@ -41,6 +41,7 @@
   <build_depend>python-sphinx</build_depend>
   <build_depend>protobuf-3.4.1</build_depend>
   <build_depend>ceres-solver-1.13.0</build_depend>
+  <build_depend>ninja-build</build_depend>
 
   <depend>boost</depend>
   <depend>eigen</depend>
